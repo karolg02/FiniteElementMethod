@@ -1,8 +1,8 @@
 #include "Node.h"
 
 void Node::addTwoNode() {
-    points.push_back(-1.0 / std::sqrt(3.0));
-    points.push_back(1.0 / std::sqrt(3.0));
+    points.push_back(-0.57735);
+    points.push_back(0.57735);
 
     weights.push_back(1.0);
     weights.push_back(1.0);

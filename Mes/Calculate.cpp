@@ -9,7 +9,7 @@
 void calculate(int iloscPc, Grid* grid, GlobalData* globaldata, Node* node) 
 {
 	Element element;
-    for (int i = 0; i < 1; i++) {                          
+    for (int i = 0; i < globaldata->nE; i++) {                          
         element.addPointsX(                       
             grid->node[grid->element[i].ID[0] - 1].x,
             grid->node[grid->element[i].ID[1] - 1].x,
@@ -30,7 +30,7 @@ void calculate(int iloscPc, Grid* grid, GlobalData* globaldata, Node* node)
         startCalculating(iloscPc,&element, node, globaldata, grid);
     }
 }
-
+//kod wykonujacy sie dla kazdego elementu
 void startCalculating(int punktyCalkowania, Element* element, Node* node, GlobalData* globaldata, Grid* grid)
 {
     vector<double> ksi;
@@ -41,11 +41,11 @@ void startCalculating(int punktyCalkowania, Element* element, Node* node, Global
 
     //kolejnosc znakow etc dla punktow
     if (punktyCalkowania == 4) {
-        ksi = { node->points[0], node->points[1], node->points[1], node->points[0] };
+        ksi = { node->points[0], node->points[1], node->points[1], node->points[0] }; //points[0] - 0,5 -- points[1] + 0,5
         eta = { node->points[0], node->points[0], node->points[1], node->points[1] };
 
-        ksiBc = { node->points[0], node->points[1], 1, 1, node->points[1] ,node->points[0], -1, -1};
-        etaBc = { -1, -1, node->points[0], node->points[1], 1, 1, node->points[1], node->points[0]};
+        ksiBc = { node->points[0], node->points[1], 1., 1., node->points[1] ,node->points[0], -1., -1.};
+        etaBc = { -1., -1., node->points[0], node->points[1], 1., 1., node->points[1], node->points[0]};
     }
     else if (punktyCalkowania == 9) {
         ksi = { node->points[0], node->points[1], node->points[2], node->points[2], node->points[1], node->points[0], node->points[0], node->points[1], node->points[2] };
@@ -81,13 +81,17 @@ void startCalculating(int punktyCalkowania, Element* element, Node* node, Global
         element->Eta[i][3] = 0.25 * (1 - ksi[i]);
 
     }
+
+    /*for (int i = 0; i < punktyCalkowania; i++) {
+        
+    }*/
+
+
     //tu dodaje funkcje ktore dzialaja na obecnych node'ach
     Jakobian* jakobian = new Jakobian;
     calculateMatrixJakobiego(punktyCalkowania,element, jakobian);
     calculateMatrixH(punktyCalkowania, element, jakobian, node, k);
-    //cout << "element elo" << endl;
-    calculateMatrixHbc(punktyCalkowania, element, node, grid, etaBc, ksiBc, k);
-    //cout << "element koniec" << endl;
+    calculateMatrixHbc(punktyCalkowania, element, node, grid, etaBc, ksiBc, globaldata->Alfa);
 }
 
 void calculateMatrixJakobiego(int punktyCalkowania, Element* element, Jakobian* jakobian)
@@ -108,8 +112,8 @@ void calculateMatrixH(int punktyCalkowania, Element* element, Jakobian* jakobian
     matrixH.calculateH(punktyCalkowania, dNdx, dNdy, jakobian, node, k, element);
 }
 
-void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta, double k)
+void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta, double alfa)
 {
     MatrixHbc matrixHbc;
-    matrixHbc.calculateN(punktyCalkowania, element, grid,ksi, eta, k);
+    matrixHbc.calculateN(punktyCalkowania, element, grid,eta, ksi, alfa, node);
 }

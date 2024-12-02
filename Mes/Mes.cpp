@@ -10,9 +10,9 @@ void run(int liczbaWezlow) {
     GlobalData* globaldata = new GlobalData;
     Grid* grid = new Grid;
     loadGlobalData(globaldata, grid);
-    grid->printNodes();
-    grid->printElements();
-    grid->printBC();
+    //grid->printNodes();
+    //grid->printElements();
+    //grid->printBC();
     Node* node = new Node(liczbaWezlow, globaldata);
     calculate(liczbaWezlow*liczbaWezlow, grid, globaldata, node);
     node->printGlobalH();
