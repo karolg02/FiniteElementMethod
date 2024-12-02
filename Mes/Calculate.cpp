@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "Jakobian.h"
 #include "MatrixH.h"
+#include "MatrixHbc.h"
 
 void calculate(int iloscPc, Grid* grid, GlobalData* globaldata, Node* node) 
 {
@@ -26,11 +27,11 @@ void calculate(int iloscPc, Grid* grid, GlobalData* globaldata, Node* node)
         element.obecne[2] = grid->element[i].ID[2];
         element.obecne[3] = grid->element[i].ID[3];
 
-        startCalculating(iloscPc,&element, node, globaldata);
+        startCalculating(iloscPc,&element, node, globaldata, grid);
     }
 }
 
-void startCalculating(int punktyCalkowania, Element* element, Node* node, GlobalData* globaldata)
+void startCalculating(int punktyCalkowania, Element* element, Node* node, GlobalData* globaldata, Grid* grid)
 {
     vector<double> ksi;
     vector<double> eta;
@@ -79,6 +80,7 @@ void startCalculating(int punktyCalkowania, Element* element, Node* node, Global
     Jakobian* jakobian = new Jakobian;
     calculateMatrixJakobiego(punktyCalkowania,element, jakobian);
     calculateMatrixH(punktyCalkowania, element, jakobian, node, k);
+    calculateMatrixHbc(punktyCalkowania, element, node, grid, ksi, eta);
 }
 
 void calculateMatrixJakobiego(int punktyCalkowania, Element* element, Jakobian* jakobian)
@@ -97,4 +99,10 @@ void calculateMatrixH(int punktyCalkowania, Element* element, Jakobian* jakobian
     MatrixH matrixH;
     matrixH.calculateDerivetivedN(punktyCalkowania, dNdx, dNdy, element, jakobian);
     matrixH.calculateH(punktyCalkowania, dNdx, dNdy, jakobian, node, k, element);
+}
+
+void calculateMatrixHbc(int, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta)
+{
+    MatrixHbc matrixHbc;
+    matrixHbc.calculateN();
 }
