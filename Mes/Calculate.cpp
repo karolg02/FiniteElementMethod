@@ -9,7 +9,7 @@
 void calculate(int iloscPc, Grid* grid, GlobalData* globaldata, Node* node) 
 {
 	Element element;
-    for (int i = 0; i < globaldata->nE; i++) {                          
+    for (int i = 0; i < 1; i++) {                          
         element.addPointsX(                       
             grid->node[grid->element[i].ID[0] - 1].x,
             grid->node[grid->element[i].ID[1] - 1].x,
@@ -35,12 +35,17 @@ void startCalculating(int punktyCalkowania, Element* element, Node* node, Global
 {
     vector<double> ksi;
     vector<double> eta;
+    vector<double> ksiBc;
+    vector<double> etaBc;
     double k = globaldata->Conductivity;
 
     //kolejnosc znakow etc dla punktow
     if (punktyCalkowania == 4) {
         ksi = { node->points[0], node->points[1], node->points[1], node->points[0] };
         eta = { node->points[0], node->points[0], node->points[1], node->points[1] };
+
+        ksiBc = { node->points[0], node->points[1], 1, 1, node->points[1] ,node->points[0], -1, -1};
+        etaBc = { -1, -1, node->points[0], node->points[1], 1, 1, node->points[1], node->points[0]};
     }
     else if (punktyCalkowania == 9) {
         ksi = { node->points[0], node->points[1], node->points[2], node->points[2], node->points[1], node->points[0], node->points[0], node->points[1], node->points[2] };
@@ -80,7 +85,9 @@ void startCalculating(int punktyCalkowania, Element* element, Node* node, Global
     Jakobian* jakobian = new Jakobian;
     calculateMatrixJakobiego(punktyCalkowania,element, jakobian);
     calculateMatrixH(punktyCalkowania, element, jakobian, node, k);
-    calculateMatrixHbc(punktyCalkowania, element, node, grid, ksi, eta);
+    //cout << "element elo" << endl;
+    calculateMatrixHbc(punktyCalkowania, element, node, grid, etaBc, ksiBc, k);
+    //cout << "element koniec" << endl;
 }
 
 void calculateMatrixJakobiego(int punktyCalkowania, Element* element, Jakobian* jakobian)
@@ -101,8 +108,8 @@ void calculateMatrixH(int punktyCalkowania, Element* element, Jakobian* jakobian
     matrixH.calculateH(punktyCalkowania, dNdx, dNdy, jakobian, node, k, element);
 }
 
-void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta)
+void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta, double k)
 {
     MatrixHbc matrixHbc;
-    matrixHbc.calculateN(punktyCalkowania, element, grid,ksi, eta);
+    matrixHbc.calculateN(punktyCalkowania, element, grid,ksi, eta, k);
 }
