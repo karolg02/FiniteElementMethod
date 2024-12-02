@@ -10,10 +10,17 @@ struct MatrixHbc {
 	double N3;
 	double N4;
 
-	void calculateN(Element* element) {
-		N1 = 0.25 * (1 - ksi[i]) * (1 - eta[i]);
-		N2 = 0.25 * (1 + ksi[i]) * (1 - eta[i]);
-		N3 = 0.25 * (1 + ksi[i]) * (1 + eta[i]);
-		N4 = 0.25 * (1 - ksi[i]) * (1 + eta[i]);
+	void calculateN(int punktyCalkowania,Element* element,Grid* grid, vector<double> ksi, vector<double> eta) {
+		for (int i = 0; i < punktyCalkowania; i++) {
+			for (int j = 0; j < grid->boundaryConditions.size(); j++) {
+				if (element->obecne[i] == grid->boundaryConditions[j]) {
+					N1 = 0.25 * (1 - ksi[i]) * (1 - eta[i]);
+					N2 = 0.25 * (1 + ksi[i]) * (1 - eta[i]);
+					N3 = 0.25 * (1 + ksi[i]) * (1 + eta[i]);
+					N4 = 0.25 * (1 - ksi[i]) * (1 + eta[i]);
+					cout<< "Punkt Bc" << element->obecne[i] << " " << N1 << " " << N2 << " " << N3 << " " << N4 << endl;
+				}
+			}
+		}
 	}
 };

@@ -101,8 +101,8 @@ void calculateMatrixH(int punktyCalkowania, Element* element, Jakobian* jakobian
     matrixH.calculateH(punktyCalkowania, dNdx, dNdy, jakobian, node, k, element);
 }
 
-void calculateMatrixHbc(int, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta)
+void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, vector<double> ksi, vector<double> eta)
 {
     MatrixHbc matrixHbc;
-    matrixHbc.calculateN();
+    matrixHbc.calculateN(punktyCalkowania, element, grid,ksi, eta);
 }
