@@ -29,12 +29,12 @@ void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vec
             Hright[j][3] = dNdy[i][j] * dNdy[i][3];
         }
         if (punktyCalkowania == 4) {
-            int gaussIndexX[] = { 0, 1, 1, 1 };
-            int gaussIndexY[] = { 0, 0, 1, 1 };
+            node->weightsPathX = { 0, 1, 1, 1 };
+            node->weightsPathY = { 0, 0, 1, 1 };
 
             for (int j = 0; j < 4; j++) {
-                int x = gaussIndexX[i];
-                int y = gaussIndexY[i];
+                int x = node->weightsPathX[i];
+                int y = node->weightsPathY[i];
 
                 H[j][0] = k * jakobian->detJ * (Hleft[j][0] + Hright[j][0]) * node->weights[x] * node->weights[y];
                 H[j][1] = k * jakobian->detJ * (Hleft[j][1] + Hright[j][1]) * node->weights[x] * node->weights[y];
@@ -43,12 +43,12 @@ void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vec
             }
         }
         else if (punktyCalkowania == 9) {
-            int gaussIndexX[] = { 0, 1, 2, 2, 1, 0, 0, 1, 2 };
-            int gaussIndexY[] = { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
+            node->weightsPathX = { 0, 1, 2, 2, 1, 0, 0, 1, 2 };
+            node->weightsPathY = { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
 
             for (int j = 0; j < 4; j++) {
-                int x = gaussIndexX[i];
-                int y = gaussIndexY[i];
+                int x = node->weightsPathX[i];
+                int y = node->weightsPathY[i];
 
                 H[j][0] = k * jakobian->detJ * (Hleft[j][0] + Hright[j][0]) * node->weights[x] * node->weights[y];
                 H[j][1] = k * jakobian->detJ * (Hleft[j][1] + Hright[j][1]) * node->weights[x] * node->weights[y];
@@ -57,18 +57,18 @@ void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vec
             }
         }
         else if (punktyCalkowania == 16) {
-            int gaussIndexX[] = { 0, 1, 2, 3,
+            node->weightsPathX = { 0, 1, 2, 3,
                                   0, 1, 2, 3,
                                   0, 1, 2, 3,
                                   0, 1, 2, 3 };
-            int gaussIndexY[] = { 0, 0, 0, 0,
+            node->weightsPathY = { 0, 0, 0, 0,
                                   1, 1, 1, 1,
                                   2, 2, 2, 2,
                                   3, 3, 3, 3 };
 
             for (int j = 0; j < 4; j++) {
-                int x = gaussIndexX[i];
-                int y = gaussIndexY[i];
+                int x = node->weightsPathX[i];
+                int y = node->weightsPathY[i];
 
                 H[j][0] = k * jakobian->detJ * (Hleft[j][0] + Hright[j][0]) * node->weights[x] * node->weights[y];
                 H[j][1] = k * jakobian->detJ * (Hleft[j][1] + Hright[j][1]) * node->weights[x] * node->weights[y];

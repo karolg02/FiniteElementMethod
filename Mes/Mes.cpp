@@ -20,5 +20,5 @@ void run(int liczbaWezlow) {
 
 int main()
 {
-    run(2);
+    run(3);
 }

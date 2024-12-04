@@ -7,8 +7,10 @@
 struct Node {
     double x = 0.0;
     double y = 0.0;
-    std::vector<double> weights;
-    std::vector<double> points;
+    vector<double> weights;
+    vector<double> points;
+    vector<int> weightsPathX;
+    vector<int> weightsPathY;
     vector<vector < double >> H_GLOBAL;
     GlobalData* globalDataRef = nullptr;
 
