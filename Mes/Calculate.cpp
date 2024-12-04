@@ -87,6 +87,7 @@ void startCalculating(int punktyCalkowania, Element* element, Node* node, Global
     }*/
 
 
+
     //tu dodaje funkcje ktore dzialaja na obecnych node'ach
     Jakobian* jakobian = new Jakobian;
     calculateMatrixJakobiego(punktyCalkowania,element, jakobian);
