@@ -6,19 +6,19 @@
 #include "Node.h"
 #include "Calculate.h"
 
-void run(int liczbaWezlow) {
+void static run(int liczbaWezlow) {
     GlobalData* globaldata = new GlobalData;
     Grid* grid = new Grid;
+    Element* element = new Element;
     loadGlobalData(globaldata, grid);
-    //grid->printNodes();
+    Node* node = new Node(liczbaWezlow, globaldata);
+    grid->printNodes();
     //grid->printElements();
     //grid->printBC();
-    Node* node = new Node(liczbaWezlow, globaldata);
-    calculate(liczbaWezlow*liczbaWezlow, grid, globaldata, node);
-    node->printGlobalH();
+    calculate(liczbaWezlow*liczbaWezlow, element, grid, globaldata, node);
 }
 
 int main()
 {
-    run(3);
+    run(2);
 }

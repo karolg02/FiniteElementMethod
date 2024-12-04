@@ -7,11 +7,16 @@ struct Grid {
     int nN = 0;
     int nE = 0;
 
-    std::vector<Node> node;
-    std::vector<Element> element;
-    std::vector<int> boundaryConditions;
+    vector<Node> node;
+    vector<Element> element;
+    vector<int> boundaryConditions;
+    vector<double> ksi;
+    vector<double> eta;
+    vector<double> ksiBc;
+    vector<double> etaBc;
 
     void printNodes();
     void printElements();
     void printBC();
+    void settings(int punktyCalkowania, Node* node);
 };
