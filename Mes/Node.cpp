@@ -36,3 +36,12 @@ void Node::printGlobalH() {
         cout << endl;
     };
 }
+
+void Node::printGlobalP()
+{
+    cout << "\nP_GLOBAL\n\n";
+    for (size_t i = 0; i < P_GLOBAL.size(); ++i) {
+        cout << P_GLOBAL[i] << " ";
+    }
+    cout << endl;
+}

@@ -15,6 +15,20 @@ void MatrixH::calculateDerivetivedN(int punktyCalkowania, vector<vector<double>>
 void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vector<vector<double>>& dNdy, Jakobian* jakobian, Node* node, double k, Element* element)
 {
     for (int i = 0; i < punktyCalkowania; i++) {
+
+        jakobian->calculateMatrix(i, element);
+        jakobian->calculateDetJ();
+        jakobian->calculateMatrixReversed();
+
+        for (int i = 0; i < punktyCalkowania; i++) {
+            for (int j = 0; j < 4; j++) {
+                //dla x
+                dNdx[i][j] = jakobian->macierzOdwrotna[0] * element->Ksi[i][j] + jakobian->macierzOdwrotna[1] * element->Eta[i][j];
+                // dla y
+                dNdy[i][j] = jakobian->macierzOdwrotna[2] * element->Ksi[i][j] + jakobian->macierzOdwrotna[3] * element->Eta[i][j];
+            }
+        }
+        
         for (int j = 0; j < 4; j++) {
             Hleft[j][0] = dNdx[i][j] * dNdx[i][0];
             Hleft[j][1] = dNdx[i][j] * dNdx[i][1];
@@ -84,6 +98,14 @@ void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vec
             Hc[j][3] = Hc[j][3] + H[j][3];
         }
     }
+    /*cout << "Macierz H czesciowa" << endl;
+    for (int i = 0; i < 4; i++) {
+        cout << Hc[i][0] << " ";
+        cout << Hc[i][1] << " ";
+        cout << Hc[i][2] << " ";
+        cout << Hc[i][3] << " ";
+        cout << endl;
+    }*/
     //sumowanie do globalnej macierzy H
     for (int j = 0; j < 4; ++j) {
         for (int k = 0; k < 4; ++k) {

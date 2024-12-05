@@ -1,4 +1,4 @@
-#include "Calculate.h"
+﻿#include "Calculate.h"
 #include "Grid.h"
 #include "Element.h"
 #include "Node.h"
@@ -9,7 +9,13 @@
 void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* globaldata, Node* node)
 {
     Jakobian* jakobian = new Jakobian;
+    // ustawia ksi i eta w zaleznosci od punktow calkowania
     grid->settings(punktyCalkowania, node);
+
+    // ustawia wartosci ksi i eta
+    calculateKsiEta(punktyCalkowania, element, node, globaldata, grid);
+
+    // ten fragment wykonuje sie dla kazdego elementu
     for (int i = 0; i < globaldata->nE; i++) {    
 
         element->addPointsX(                       
@@ -28,37 +34,26 @@ void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* g
         element->obecne[1] = grid->element[i].ID[1];
         element->obecne[2] = grid->element[i].ID[2];
         element->obecne[3] = grid->element[i].ID[3];
-
-        calculateKsiEta(punktyCalkowania,element, node, globaldata, grid);
-        calculateMatrixJakobiego(punktyCalkowania, element, jakobian);
+        // tutaj dodaje funckje
         calculateMatrixH(punktyCalkowania, element, jakobian, node, globaldata->Conductivity);
-        calculateMatrixHbc(punktyCalkowania, element, node, grid, globaldata->Alfa);
+        calculateMatrixHbc(punktyCalkowania, element, node, grid, globaldata);
     }
     node->printGlobalH();
+    node->printGlobalP();
 }
 
 void calculateKsiEta(int punktyCalkowania, Element* element, Node* node, GlobalData* globaldata, Grid* grid)
 {
     for (int i = 0; i < punktyCalkowania; i++) {
-        // KSI
         element->Ksi[i][0] = -0.25 * (1 - grid->eta[i]);
         element->Ksi[i][1] = 0.25 * (1 - grid->eta[i]);
         element->Ksi[i][2] = 0.25 * (1 + grid->eta[i]);
         element->Ksi[i][3] = -0.25 * (1 + grid->eta[i]);
-        // ETA
+
         element->Eta[i][0] = -0.25 * (1 - grid->ksi[i]);
         element->Eta[i][1] = -0.25 * (1 + grid->ksi[i]);
         element->Eta[i][2] = 0.25 * (1 + grid->ksi[i]);
         element->Eta[i][3] = 0.25 * (1 - grid->ksi[i]);
-    }
-}
-
-void calculateMatrixJakobiego(int punktyCalkowania, Element* element, Jakobian* jakobian)
-{
-    for (int i = 0; i < punktyCalkowania; i++) {
-        jakobian->calculateMatrix(i,element);
-        jakobian->calculateDetJ();
-        jakobian->calculateMatrixReversed();
     }
 }
 
@@ -71,8 +66,8 @@ void calculateMatrixH(int punktyCalkowania, Element* element, Jakobian* jakobian
     matrixH.calculateH(punktyCalkowania, dNdx, dNdy, jakobian, node, k, element);
 }
 
-void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, double alfa)
+void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, GlobalData* globaldata)
 {
     MatrixHbc matrixHbc;
-    matrixHbc.calculateN(punktyCalkowania, element, grid, alfa, node);
+    matrixHbc.calculateN(punktyCalkowania, element, grid, globaldata, node);
 }

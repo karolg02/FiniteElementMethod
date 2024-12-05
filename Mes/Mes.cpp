@@ -12,7 +12,7 @@ void static run(int liczbaWezlow) {
     Element* element = new Element;
     loadGlobalData(globaldata, grid);
     Node* node = new Node(liczbaWezlow, globaldata);
-    grid->printNodes();
+    //grid->printNodes();
     //grid->printElements();
     //grid->printBC();
     calculate(liczbaWezlow*liczbaWezlow, element, grid, globaldata, node);

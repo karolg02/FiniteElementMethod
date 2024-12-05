@@ -12,12 +12,14 @@ struct Node {
     vector<int> weightsPathX;
     vector<int> weightsPathY;
     vector<vector < double >> H_GLOBAL;
+    vector<double> P_GLOBAL;
     GlobalData* globalDataRef = nullptr;
 
     Node() {}
 
     Node(int iloscWezlow, GlobalData* globaldata) : globalDataRef(globaldata) {
         H_GLOBAL.resize(globaldata->nN, vector<double>(globaldata->nN, 0));
+        P_GLOBAL.resize(globaldata->nN, 0.0);
         if (iloscWezlow == 2) {
             addTwoNode();
         }
@@ -36,4 +38,6 @@ struct Node {
     void addFourNode();
 
     void printGlobalH();
+
+    void printGlobalP();
 };

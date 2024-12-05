@@ -1,8 +1,7 @@
 #include "MatrixHbc.h"
 
-void MatrixHbc::calculateN(int punktyCalkowania, Element* element, Grid* grid, double alfa, Node* node)
+void MatrixHbc::calculateN(int punktyCalkowania, Element* element, Grid* grid, GlobalData* globaldata, Node* node)
 {
-    memset(Hb_czastkowe, 0, sizeof(Hb_czastkowe));
     // dla kazdej krawedzi, w elemencie
     for (int krawedz = 0; krawedz < 4; ++krawedz) {
         int node1 = element->obecne[krawedz];
@@ -45,8 +44,9 @@ void MatrixHbc::calculateN(int punktyCalkowania, Element* element, Grid* grid, d
             //cout << "N1: " << N1 << " " << "N2: " << N2 << " " << "N3: " << N3 << " " << "N4: " << N4 << endl;
 
             for (int i = 0; i < 4; ++i) {
+                P[i] += globaldata->Alfa * globaldata->Tot * N[i] * detJ * node->weights[punkt];
                 for (int j = 0; j < 4; ++j) {
-                    Hb_calkowite[i][j] += alfa * N[i] * N[j] * detJ * node->weights[punkt];
+                    Hb_calkowite[i][j] += globaldata->Alfa * N[i] * N[j] * detJ * node->weights[punkt];
                 }
             }
         }
@@ -61,7 +61,14 @@ void MatrixHbc::calculateN(int punktyCalkowania, Element* element, Grid* grid, d
     }
     cout << "\n\n";
 
+    cout << "Wektor P:" << endl;
     for (int i = 0; i < 4; ++i) {
+        cout << P[i] << " ";
+    }
+    cout << "\n\n";
+
+    for (int i = 0; i < 4; ++i) {
+        node->P_GLOBAL[element->obecne[i] - 1] += P[i];
         for (int j = 0; j < 4; ++j) {
             node->H_GLOBAL[element->obecne[i] - 1][element->obecne[j] - 1] += Hb_calkowite[i][j];
         }

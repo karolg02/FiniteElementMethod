@@ -82,5 +82,8 @@
     <Text Include="test.txt">
       <Filter>Pliki zasobów</Filter>
     </Text>
+    <Text Include="Test2_4_4_MixGrid.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
   </ItemGroup>
 </Project>
