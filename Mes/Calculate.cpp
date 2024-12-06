@@ -34,6 +34,7 @@ void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* g
         element->obecne[1] = grid->element[i].ID[1];
         element->obecne[2] = grid->element[i].ID[2];
         element->obecne[3] = grid->element[i].ID[3];
+
         // tutaj dodaje funckje
         calculateMatrixH(punktyCalkowania, element, jakobian, node, globaldata->Conductivity);
         calculateMatrixHbc(punktyCalkowania, element, node, grid, globaldata);
@@ -62,12 +63,11 @@ void calculateMatrixH(int punktyCalkowania, Element* element, Jakobian* jakobian
     vector<vector<double>> dNdx(punktyCalkowania, vector<double>(4));           //Zbiory na pochodne funkcji ksztaltu
     vector<vector<double>> dNdy(punktyCalkowania, vector<double>(4));          //po x i y
     MatrixH matrixH;
-    matrixH.calculateDerivetivedN(punktyCalkowania, dNdx, dNdy, element, jakobian);
     matrixH.calculateH(punktyCalkowania, dNdx, dNdy, jakobian, node, k, element);
 }
 
 void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid* grid, GlobalData* globaldata)
 {
     MatrixHbc matrixHbc;
-    matrixHbc.calculateN(punktyCalkowania, element, grid, globaldata, node);
+    matrixHbc.calculateHbc(punktyCalkowania, element, grid, globaldata, node);
 }

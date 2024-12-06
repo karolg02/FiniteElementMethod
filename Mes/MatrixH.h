@@ -11,7 +11,5 @@ struct MatrixH {
     double Hright[4][4] = { 0 };
     int size = 0;
 
-    void calculateDerivetivedN(int punktyCalkowania, vector<vector<double>>& dNdx, vector<vector<double>>& dNdy, Element* element, Jakobian* jakobian);
-
     void calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vector<vector<double>>& dNdy, Jakobian* jakobian, Node* node, double k, Element* element);
 };

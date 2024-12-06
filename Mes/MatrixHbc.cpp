@@ -1,6 +1,6 @@
 #include "MatrixHbc.h"
 
-void MatrixHbc::calculateN(int punktyCalkowania, Element* element, Grid* grid, GlobalData* globaldata, Node* node)
+void MatrixHbc::calculateHbc(int punktyCalkowania, Element* element, Grid* grid, GlobalData* globaldata, Node* node)
 {
     // dla kazdej krawedzi, w elemencie
     for (int krawedz = 0; krawedz < 4; ++krawedz) {

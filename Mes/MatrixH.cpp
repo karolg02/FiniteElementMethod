@@ -1,17 +1,5 @@
 #include "MatrixH.h"
 
-void MatrixH::calculateDerivetivedN(int punktyCalkowania, vector<vector<double>>& dNdx, vector<vector<double>>& dNdy, Element* element, Jakobian* jakobian)
-{
-    for (int i = 0; i < punktyCalkowania; i++) {
-        for (int j = 0; j < 4; j++) {
-            //dla x
-            dNdx[i][j] = jakobian->macierzOdwrotna[0] * element->Ksi[i][j] + jakobian->macierzOdwrotna[1] * element->Eta[i][j];
-            // dla y
-            dNdy[i][j] = jakobian->macierzOdwrotna[2] * element->Ksi[i][j] + jakobian->macierzOdwrotna[3] * element->Eta[i][j];
-        }
-    }
-}
-
 void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vector<vector<double>>& dNdy, Jakobian* jakobian, Node* node, double k, Element* element)
 {
     for (int i = 0; i < punktyCalkowania; i++) {
@@ -20,13 +8,11 @@ void MatrixH::calculateH(int punktyCalkowania, vector<vector<double>>& dNdx, vec
         jakobian->calculateDetJ();
         jakobian->calculateMatrixReversed();
 
-        for (int i = 0; i < punktyCalkowania; i++) {
-            for (int j = 0; j < 4; j++) {
-                //dla x
-                dNdx[i][j] = jakobian->macierzOdwrotna[0] * element->Ksi[i][j] + jakobian->macierzOdwrotna[1] * element->Eta[i][j];
-                // dla y
-                dNdy[i][j] = jakobian->macierzOdwrotna[2] * element->Ksi[i][j] + jakobian->macierzOdwrotna[3] * element->Eta[i][j];
-            }
+        for (int j = 0; j < 4; j++) {
+            //dla x
+            dNdx[i][j] = jakobian->macierzOdwrotna[0] * element->Ksi[i][j] + jakobian->macierzOdwrotna[1] * element->Eta[i][j];
+            // dla y
+            dNdy[i][j] = jakobian->macierzOdwrotna[2] * element->Ksi[i][j] + jakobian->macierzOdwrotna[3] * element->Eta[i][j];
         }
         
         for (int j = 0; j < 4; j++) {
