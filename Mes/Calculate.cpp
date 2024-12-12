@@ -71,3 +71,43 @@ void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid
     MatrixHbc matrixHbc;
     matrixHbc.calculateHbc(punktyCalkowania, element, grid, globaldata, node);
 }
+
+void GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<double>& P_GLOBAL) {
+    int size = P_GLOBAL.size();
+    vector<vector<double>> tablica(size, vector<double>(size + 1, 0.0));
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            tablica[i][j] = H_GLOBAL[i][j];
+        }
+        tablica[i][size] = P_GLOBAL[i];
+    }
+
+    double wspolczynnik;
+    for (int z = 0; z < size - 1; z++) {
+        for (int i = 0; i < size - z - 1; i++) {
+            wspolczynnik = tablica[z + i + 1][z] / tablica[z][z];
+            for (int j = z; j < size + 1; j++) {
+                tablica[z + i + 1][j] -= wspolczynnik * tablica[z][j];
+            }
+        }
+    }
+
+    vector<double> wyniki(size);
+    wyniki[size - 1] = tablica[size - 1][size] / tablica[size - 1][size - 1];
+    int licznik = 1;
+    double suma = 0;
+    for (int i = size - 2; i >= 0; i--) {
+        suma = 0;
+        for (int j = size; j > size - licznik; j--) {
+            suma += wyniki[j - 1] * tablica[i][j - 1];
+        }
+        licznik++;
+        wyniki[i] = (tablica[i][size] - suma) / tablica[i][i];
+    }
+    cout << "\nWyniki temperatury otoczenia\n\n";
+    for (double val : wyniki) {
+        cout << val << " ";
+    }
+    cout << endl;
+}
