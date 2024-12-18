@@ -14,11 +14,13 @@ void static run(int liczbaWezlow) {
     loadGlobalData(globaldata, grid);
     Node* node = new Node(liczbaWezlow, globaldata);
     calculate(liczbaWezlow*liczbaWezlow, element, grid, globaldata, node);
-    //GaussElimination(node->H_GLOBAL, node->P_GLOBAL);
-    finalCalculation(node, globaldata, grid);
+
+    delete element, grid;
+
+    finalCalculation(node, globaldata);
 }
 
 int main()
 {
-    run(2);
+    run(4);
 }

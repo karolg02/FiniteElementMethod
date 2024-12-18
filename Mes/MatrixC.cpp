@@ -8,7 +8,7 @@ void MatrixC::calculateC(int punktyCalkowania, Element* element, Node* node, Gri
 		double N3 = 0.25 * (1 + grid->ksi[i]) * (1 + grid->eta[i]);
 		double N4 = 0.25 * (1 - grid->ksi[i]) * (1 + grid->eta[i]);
 
-		cout << N1 << ", " << N2 << ", " << N3 << ", " << N4 << endl;
+		//cout << N1 << ", " << N2 << ", " << N3 << ", " << N4 << endl;
 		double N[4] = { N1, N2, N3, N4 };
 
 		jakobian->calculateMatrix(i, element);
@@ -16,10 +16,20 @@ void MatrixC::calculateC(int punktyCalkowania, Element* element, Node* node, Gri
 
 		for (int j = 0; j < 4; ++j) {
 			for (int k = 0; k < 4; ++k) {
-				C[j][k] += globaldata->Density* globaldata->SpecificHeat * N[j] * N[k] * jakobian->detJ * node->weights[node->weightsPathX[i]] * node->weights[node->weightsPathY[i]];
+				C[j][k] += globaldata->Density* globaldata->SpecificHeat * N[j] * N[k] *
+					jakobian->detJ * node->weights[node->weightsPathX[i]] * node->weights[node->weightsPathY[i]];
+				//cout << "Nj: " << N[j] << " Nk: " << N[k] << endl;
 			}
 		}
 	}
+
+	/*cout << "\nC czastkowe:" << endl;
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			cout << C[i][j] << " ";
+		}
+		cout << endl;
+	}*/
 
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {

@@ -10,4 +10,4 @@ void calculateMatrixH(int, Element* element, Jakobian* jakobian, Node* node, dou
 void calculateMatrixHbc(int, Element* element, Node* node, Grid* grid, GlobalData* globaldata);
 vector<double> GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<double>& P_GLOBAL);
 void calculateMatrixC(int , Element* element, Node* node, Grid* grid, GlobalData* globaldata, Jakobian* jakobian);
-void finalCalculation(Node* node, GlobalData* globaldata, Grid* grid);
+void finalCalculation(Node* node, GlobalData* globaldata);

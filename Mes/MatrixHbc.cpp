@@ -48,7 +48,7 @@ void MatrixHbc::calculateHbc(int punktyCalkowania, Element* element, Grid* grid,
         }
     }
 
-    cout << "Macierz Hbc:" << endl;
+    /*cout << "Macierz Hbc:" << endl;
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             cout << Hb_calkowite[i][j] << "  ";
@@ -61,7 +61,7 @@ void MatrixHbc::calculateHbc(int punktyCalkowania, Element* element, Grid* grid,
     for (int i = 0; i < 4; ++i) {
         cout << P[i] << " ";
     }
-    cout << "\n\n";
+    cout << "\n\n";*/
 
     for (int i = 0; i < 4; ++i) {
         node->P_GLOBAL[element->obecne[i] - 1] += P[i];

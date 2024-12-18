@@ -6,6 +6,7 @@
 #include "MatrixH.h"
 #include "MatrixHbc.h"
 #include "MatrixC.h"
+#include <omp.h>
 
 void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* globaldata, Node* node)
 {
@@ -41,9 +42,10 @@ void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* g
         calculateMatrixHbc(punktyCalkowania, element, node, grid, globaldata);
         calculateMatrixC(punktyCalkowania, element, node, grid, globaldata, jakobian);
     }
-    node->printGlobalH();
-    node->printGlobalP();
-    node->printGlobalC();
+    delete jakobian;
+    //node->printGlobalH();
+    //node->printGlobalP();
+    //node->printGlobalC();
 }
 
 void calculateKsiEta(int punktyCalkowania, Element* element, Node* node, GlobalData* globaldata, Grid* grid)
@@ -86,10 +88,9 @@ vector<double> GaussElimination(const vector<vector<double>>& H_GLOBAL, const ve
         tablica[i][size] = P_GLOBAL[i];
     }
 
-    double wspolczynnik;
     for (int z = 0; z < size - 1; z++) {
         for (int i = 0; i < size - z - 1; i++) {
-            wspolczynnik = tablica[z + i + 1][z] / tablica[z][z];
+            double wspolczynnik = tablica[z + i + 1][z] / tablica[z][z];
             for (int j = z; j < size + 1; j++) {
                 tablica[z + i + 1][j] -= wspolczynnik * tablica[z][j];
             }
@@ -108,11 +109,6 @@ vector<double> GaussElimination(const vector<vector<double>>& H_GLOBAL, const ve
         licznik++;
         wyniki[i] = (tablica[i][size] - suma) / tablica[i][i];
     }
-    /*cout << "\nWyniki temperatury otoczenia\n\n";
-    for (double val : wyniki) {
-        cout << val << " ";
-    }
-    cout << endl;*/
 
     return wyniki;
 }
@@ -123,30 +119,24 @@ void calculateMatrixC(int punktyCalkowania, Element* element, Node* node, Grid* 
     matrixC.calculateC(punktyCalkowania, element, node, grid, globaldata, jakobian);
 }
 
-void finalCalculation(Node* node, GlobalData* globaldata, Grid* grid) {
+void finalCalculation(Node* node, GlobalData* globaldata) {
     vector<vector < double >> left;
     vector<double> right;
     vector<double> temp;
     temp.resize(globaldata->nN, 100.0);
+    left.resize(globaldata->nN, vector<double>(globaldata->nN, 0));
 
+#pragma omp parallel for num_threads(4)
+    for (int i = 0; i < globaldata->nN; i++) {
+        for (int j = 0; j < globaldata->nN; j++) {
+            left[i][j] = node->H_GLOBAL[i][j] + node->C_GLOBAL[i][j] / globaldata->SimulationStepTime;
+        }
+    }
 
     for (double st = globaldata->SimulationStepTime; st <= globaldata->SimulationTime; st += globaldata->SimulationStepTime) {
-        left.resize(globaldata->nN, vector<double>(globaldata->nN, 0));
         right.resize(globaldata->nN, 0.0);
 
-        for (int i = 0; i < globaldata->nN; i++) {
-            for (int j = 0; j < globaldata->nN; j++) {
-                left[i][j] = node->H_GLOBAL[i][j] + node->C_GLOBAL[i][j] / globaldata->SimulationStepTime;
-            }
-        }
-       /* cout << "\nleft\n" << endl;
-        for (int j = 0; j < globaldata->nN; ++j) {
-            for (int k = 0; k < globaldata->nN; ++k) {
-                cout << left[j][k] << " ";
-            }
-            cout << endl;
-        };*/
-
+#pragma omp parallel for num_threads(4)
         for (int i = 0; i < globaldata->nN; i++) {
             right[i] = 0.0;
             for (int j = 0; j < globaldata->nN; j++) {
@@ -154,6 +144,7 @@ void finalCalculation(Node* node, GlobalData* globaldata, Grid* grid) {
             }
             right[i] += node->P_GLOBAL[i];
         }
+
         vector<double> t1 = GaussElimination(left, right);
         double tempMin = t1[0];
         double tempMax = t1[0];
@@ -170,9 +161,5 @@ void finalCalculation(Node* node, GlobalData* globaldata, Grid* grid) {
 
         cout << "\nMin " << tempMin;
         cout << " Max " << tempMax << endl;
-        //cout << "Right" << endl;
-        //for (int j = 0; j < 16; ++j) {
-        //    cout << right[j] << " ";
-        //};
     }
 }
