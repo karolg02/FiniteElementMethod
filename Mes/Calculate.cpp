@@ -5,6 +5,7 @@
 #include "Jakobian.h"
 #include "MatrixH.h"
 #include "MatrixHbc.h"
+#include "MatrixC.h"
 
 void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* globaldata, Node* node)
 {
@@ -38,9 +39,11 @@ void calculate(int punktyCalkowania, Element* element, Grid* grid, GlobalData* g
         // tutaj dodaje funckje
         calculateMatrixH(punktyCalkowania, element, jakobian, node, globaldata->Conductivity);
         calculateMatrixHbc(punktyCalkowania, element, node, grid, globaldata);
+        calculateMatrixC(punktyCalkowania, element, node, grid, globaldata, jakobian);
     }
     node->printGlobalH();
     node->printGlobalP();
+    node->printGlobalC();
 }
 
 void calculateKsiEta(int punktyCalkowania, Element* element, Node* node, GlobalData* globaldata, Grid* grid)
@@ -110,4 +113,14 @@ void GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<doubl
         cout << val << " ";
     }
     cout << endl;
+}
+
+void calculateMatrixC(int punktyCalkowania, Element* element, Node* node, Grid* grid, GlobalData* globaldata, Jakobian* jakobian)
+{
+    MatrixC matrixC;
+    matrixC.calculateC(punktyCalkowania, element, node, grid, globaldata, jakobian);
+}
+
+void finalCalculation() {
+
 }

@@ -134,6 +134,7 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Jakobian.cpp" />
     <ClCompile Include="LoadGlobalData.cpp" />
+    <ClCompile Include="MatrixC.cpp" />
     <ClCompile Include="MatrixH.cpp" />
     <ClCompile Include="MatrixHbc.cpp" />
     <ClCompile Include="Mes.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Jakobian.h" />
     <ClInclude Include="LoadGlobalData.h" />
+    <ClInclude Include="MatrixC.h" />
     <ClInclude Include="MatrixH.h" />
     <ClInclude Include="MatrixHbc.h" />
     <ClInclude Include="Node.h" />

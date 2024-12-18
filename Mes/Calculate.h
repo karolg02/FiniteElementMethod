@@ -9,3 +9,4 @@ void calculateKsiEta(int, Element* element, Node* node, GlobalData* globaldata, 
 void calculateMatrixH(int, Element* element, Jakobian* jakobian, Node* node, double);
 void calculateMatrixHbc(int, Element* element, Node* node, Grid* grid, GlobalData* globaldata);
 void GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<double>& P_GLOBAL);
+void calculateMatrixC(int , Element* element, Node* node, Grid* grid, GlobalData* globaldata, Jakobian* jakobian);

@@ -45,3 +45,14 @@ void Node::printGlobalP()
     }
     cout << endl;
 }
+
+void Node::printGlobalC()
+{
+    cout << "\nC_GLOBAL\n" << endl;
+    for (int j = 0; j < C_GLOBAL.size(); ++j) {
+        for (int k = 0; k < C_GLOBAL.size(); ++k) {
+            cout << C_GLOBAL[j][k] << " ";
+        }
+        cout << endl;
+    };
+}

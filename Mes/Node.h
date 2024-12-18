@@ -13,6 +13,7 @@ struct Node {
     vector<int> weightsPathY;
     vector<vector < double >> H_GLOBAL;
     vector<double> P_GLOBAL;
+    vector<vector < double>> C_GLOBAL;
     GlobalData* globalDataRef = nullptr;
 
     Node() {}
@@ -20,6 +21,7 @@ struct Node {
     Node(int iloscWezlow, GlobalData* globaldata) : globalDataRef(globaldata) {
         H_GLOBAL.resize(globaldata->nN, vector<double>(globaldata->nN, 0));
         P_GLOBAL.resize(globaldata->nN, 0.0);
+        C_GLOBAL.resize(globaldata->nN, vector<double>(globaldata->nN, 0));
         if (iloscWezlow == 2) {
             addTwoNode();
         }
@@ -40,4 +42,6 @@ struct Node {
     void printGlobalH();
 
     void printGlobalP();
+
+    void printGlobalC();
 };

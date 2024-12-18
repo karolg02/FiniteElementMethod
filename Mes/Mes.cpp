@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "Node.h"
 #include "Calculate.h"
+using namespace std;
 
 void static run(int liczbaWezlow) {
     GlobalData* globaldata = new GlobalData;
@@ -18,5 +19,5 @@ void static run(int liczbaWezlow) {
 
 int main()
 {
-    run(4);
+    run(2);
 }

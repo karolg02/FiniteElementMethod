@@ -22,13 +22,9 @@ void MatrixHbc::calculateHbc(int punktyCalkowania, Element* element, Grid* grid,
 
         if (!isBoundaryEdge) continue;
 
-
-        /*cout << "x1= " << element->pointsX[krawedz] << " x2= " << element->pointsX[(krawedz + 1) % 4] << endl;
-        cout << "y1= " << element->pointsY[krawedz] << " y2= " << element->pointsY[(krawedz + 1) % 4] << endl;*/
         detJ = sqrt(pow((element->pointsX[krawedz] - element->pointsX[(krawedz + 1) % 4]), 2)
             + pow((element->pointsY[krawedz] - element->pointsY[(krawedz + 1) % 4]), 2)) / 2;
 
-        //cout << "detJ " << detJ << endl;
 
         int x = sqrt(punktyCalkowania);
 
