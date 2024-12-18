@@ -75,7 +75,7 @@ void calculateMatrixHbc(int punktyCalkowania, Element* element, Node* node, Grid
     matrixHbc.calculateHbc(punktyCalkowania, element, grid, globaldata, node);
 }
 
-void GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<double>& P_GLOBAL) {
+vector<double> GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<double>& P_GLOBAL) {
     int size = P_GLOBAL.size();
     vector<vector<double>> tablica(size, vector<double>(size + 1, 0.0));
 
@@ -108,11 +108,13 @@ void GaussElimination(const vector<vector<double>>& H_GLOBAL, const vector<doubl
         licznik++;
         wyniki[i] = (tablica[i][size] - suma) / tablica[i][i];
     }
-    cout << "\nWyniki temperatury otoczenia\n\n";
+    /*cout << "\nWyniki temperatury otoczenia\n\n";
     for (double val : wyniki) {
         cout << val << " ";
     }
-    cout << endl;
+    cout << endl;*/
+
+    return wyniki;
 }
 
 void calculateMatrixC(int punktyCalkowania, Element* element, Node* node, Grid* grid, GlobalData* globaldata, Jakobian* jakobian)
@@ -121,6 +123,56 @@ void calculateMatrixC(int punktyCalkowania, Element* element, Node* node, Grid* 
     matrixC.calculateC(punktyCalkowania, element, node, grid, globaldata, jakobian);
 }
 
-void finalCalculation() {
+void finalCalculation(Node* node, GlobalData* globaldata, Grid* grid) {
+    vector<vector < double >> left;
+    vector<double> right;
+    vector<double> temp;
+    temp.resize(globaldata->nN, 100.0);
 
+
+    for (double st = globaldata->SimulationStepTime; st <= globaldata->SimulationTime; st += globaldata->SimulationStepTime) {
+        left.resize(globaldata->nN, vector<double>(globaldata->nN, 0));
+        right.resize(globaldata->nN, 0.0);
+
+        for (int i = 0; i < globaldata->nN; i++) {
+            for (int j = 0; j < globaldata->nN; j++) {
+                left[i][j] = node->H_GLOBAL[i][j] + node->C_GLOBAL[i][j] / globaldata->SimulationStepTime;
+            }
+        }
+       /* cout << "\nleft\n" << endl;
+        for (int j = 0; j < globaldata->nN; ++j) {
+            for (int k = 0; k < globaldata->nN; ++k) {
+                cout << left[j][k] << " ";
+            }
+            cout << endl;
+        };*/
+
+        for (int i = 0; i < globaldata->nN; i++) {
+            right[i] = 0.0;
+            for (int j = 0; j < globaldata->nN; j++) {
+                right[i] += (node->C_GLOBAL[i][j] / globaldata->SimulationStepTime) * temp[j];
+            }
+            right[i] += node->P_GLOBAL[i];
+        }
+        vector<double> t1 = GaussElimination(left, right);
+        double tempMin = t1[0];
+        double tempMax = t1[0];
+
+        for (int i = 0; i < globaldata->nN; i++) {
+            temp[i] = t1[i];
+            if (t1[i] > tempMax) {
+                tempMax = t1[i];
+            }
+            if (t1[i] < tempMin) {
+                tempMin = t1[i];
+            }
+        }
+
+        cout << "\nMin " << tempMin;
+        cout << " Max " << tempMax << endl;
+        //cout << "Right" << endl;
+        //for (int j = 0; j < 16; ++j) {
+        //    cout << right[j] << " ";
+        //};
+    }
 }

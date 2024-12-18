@@ -16,6 +16,7 @@ struct Node {
     vector<vector < double>> C_GLOBAL;
     GlobalData* globalDataRef = nullptr;
 
+
     Node() {}
 
     Node(int iloscWezlow, GlobalData* globaldata) : globalDataRef(globaldata) {

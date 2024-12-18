@@ -9,7 +9,7 @@
 void loadGlobalData(GlobalData* globaldata, Grid* grid) {
     //test.txt
     //31.txt
-    std::ifstream file("test.txt");
+    std::ifstream file("Test2_4_4_MixGrid.txt");
 
     std::string temp, line;
     std::stringstream xline;
