@@ -82,10 +82,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="31.txt">
+    <Text Include="Test3_31_31_kwadrat.txt">
       <Filter>Pliki zasobów</Filter>
     </Text>
-    <Text Include="test.txt">
+    <Text Include="Test1_4_4.txt">
       <Filter>Pliki zasobów</Filter>
     </Text>
     <Text Include="Test2_4_4_MixGrid.txt">

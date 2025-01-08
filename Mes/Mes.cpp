@@ -16,11 +16,12 @@ void static run(int liczbaWezlow) {
     calculate(liczbaWezlow*liczbaWezlow, element, grid, globaldata, node);
 
     delete element, grid;
-
+    //GaussElimination(node->H_GLOBAL, node->P_GLOBAL);
     finalCalculation(node, globaldata);
 }
 
 int main()
 {
-    run(4);
+    cout << "Ilosc punktow calkowania: " << 16 << endl;
+    run(4);         //2, 3 lub 4 punktowy schemat calkowania
 }

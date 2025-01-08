@@ -109,6 +109,11 @@ vector<double> GaussElimination(const vector<vector<double>>& H_GLOBAL, const ve
         licznik++;
         wyniki[i] = (tablica[i][size] - suma) / tablica[i][i];
     }
+    /*cout << "\nWyniki temperatury otoczenia\n\n";
+    for (double val : wyniki) {
+        cout << val << " ";
+    }
+    cout << endl;*/
 
     return wyniki;
 }
